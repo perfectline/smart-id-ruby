@@ -39,8 +39,12 @@ module SmartId
             hashType: 'SHA256',
             allowedInteractionsOrder: [
               {
+                type: 'verificationCodeChoice',
+                displayText60: SmartId.display_text_60
+              },
+              {
                 type: 'displayTextAndPIN',
-                displayText60: 'Up to 60 characters of text here..'
+                displayText60: SmartId.display_text_60
               }
             ]
           }

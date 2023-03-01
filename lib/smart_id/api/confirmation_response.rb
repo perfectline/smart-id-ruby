@@ -1,55 +1,61 @@
-module SmartId::Api
-  class ConfirmationResponse
-    RUNNING_STATE = "RUNNING"
-    COMPLETED_STATE = "COMPLETE"
+# frozen_string_literal: true
 
-    attr_reader :body
-    
-    def initialize(response_body, hashed_data)
-      @body = response_body
-      validate!(hashed_data)
-    end
+module SmartId
+  module Api
+    class ConfirmationResponse
 
-    def confirmation_running?
-      state == RUNNING_STATE
-    end
+      RUNNING_STATE = 'RUNNING'
+      COMPLETED_STATE = 'COMPLETE'
 
-    def state
-      @body["state"]
-    end
+      attr_reader :body
 
-    def end_result
-      @body.dig("result", "endResult")
-    end
+      def initialize(response_body, hashed_data)
+        @body = response_body
+        validate!(hashed_data)
+      end
 
-    def document_number
-      @body.dig("result", "documentNumber")
-    end
+      def confirmation_running?
+        state == RUNNING_STATE
+      end
 
-    def certificate_level
-      @body.dig("cert", "certificateLevel")
-    end
+      def state
+        @body['state']
+      end
 
-    def certificate
-      @certificate ||= SmartId::AuthenticationCertificate::Certificate.new(@body.dig("cert", "value"))
-    end
+      def end_result
+        @body.dig('result', 'endResult')
+      end
 
-    def signature_algorithm
-      @body.dig("signature", "algorithm")
-    end
+      def document_number
+        @body.dig('result', 'documentNumber')
+      end
 
-    def signature
-      @body.dig("signature", "value")
-    end
+      def certificate_level
+        @body.dig('cert', 'certificateLevel')
+      end
 
-    def ignored_properties
-      @body["ignoredProperties"]
-    end
+      def certificate
+        @certificate ||= SmartId::AuthenticationCertificate::Certificate.new(@body.dig('cert', 'value'))
+      end
 
-    private
-    
-    def validate!(hashed_data)
-      SmartId::Utils::CertificateValidator.validate!(hashed_data, signature, certificate)
+      def signature_algorithm
+        @body.dig('signature', 'algorithm')
+      end
+
+      def signature
+        @body.dig('signature', 'value')
+      end
+
+      def ignored_properties
+        @body['ignoredProperties']
+      end
+
+      private
+
+      def validate!(hashed_data)
+        SmartId::Utils::CertificateValidator.validate!(hashed_data, signature, certificate)
+      end
+
     end
   end
 end

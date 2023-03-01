@@ -1,19 +1,25 @@
-require "smart_id/api/authentication/base"
+# frozen_string_literal: true
 
-module SmartId::Api
-  module Authentication
-    class Document < Base
-      BASE_URI = "authentication/document"
+require 'smart_id/api/authentication/base'
 
-      def initialize(**opts)
-        @document_number = opts[:document_number]
-        super(**opts)
-      end
+module SmartId
+  module Api
+    module Authentication
+      class Document < Base
 
-      private
+        BASE_URI = 'authentication/document'
 
-      def api_uri
-        "#{BASE_URI}/#{@document_number}"
+        def initialize(**opts)
+          @document_number = opts[:document_number]
+          super(**opts)
+        end
+
+        private
+
+        def api_uri
+          "#{BASE_URI}/#{@document_number}"
+        end
+
       end
     end
   end
