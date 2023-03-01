@@ -1,54 +1,61 @@
-require "rest-client"
-require "smart_id/exceptions"
-require "smart_id/utils/authentication_hash"
-require "json"
+# frozen_string_literal: true
 
-module SmartId::Api
-  module Authentication
-    class Base
-      attr_reader :authentication_hash
+require 'rest-client'
+require 'smart_id/exceptions'
+require 'smart_id/utils/authentication_hash'
+require 'json'
 
-      def self.authenticate(**opts)
-        new(**opts).call
-      end
+module SmartId
+  module Api
+    module Authentication
+      class Base
 
-      def initialize(**opts)
-        @authentication_hash = opts[:authentication_hash]
-        @display_text = opts[:display_text]
-        @certificate_level = opts[:certificate_level]
-        @multiple_choice = opts[:multiple_choice]
-      end
+        attr_reader :authentication_hash
 
-
-      def call
-        response = SmartId::Api::Request.execute(method: :post, uri: api_uri, params: request_params)
-        SmartId::Api::Response.new(JSON.parse(response.body), authentication_hash)
-      end
-
-      private
-
-      def request_params
-        params = {
-          relyingPartyUUID: SmartId.relying_party_uuid,
-          relyingPartyName: SmartId.relying_party_name,
-          certificateLevel: @certificate_level || SmartId.default_certificate_level,
-          hash: authentication_hash.calculate_base64_digest,
-          hashType: "SHA256"
-        }
-
-        if @display_text
-          params.merge!(displayText: @display_text)
+        def self.authenticate(**opts)
+          new(**opts).call
         end
 
-        if @multiple_choice
-          params.merge!(requestProperties: { vcChoice: @multiple_choice })
+        def initialize(**opts)
+          @authentication_hash = opts[:authentication_hash]
+          @display_text = opts[:display_text]
+          @certificate_level = opts[:certificate_level]
+          @multiple_choice = opts[:multiple_choice]
         end
 
-        params
-      end
+        def call
+          response = SmartId::Api::Request.execute(method: :post, uri: api_uri, params: request_params)
+          SmartId::Api::Response.new(JSON.parse(response.body), authentication_hash)
+        end
 
-      def api_uri
-        raise NotImplementedError
+        private
+
+        def request_params
+          params = {
+            relyingPartyUUID: SmartId.relying_party_uuid,
+            relyingPartyName: SmartId.relying_party_name,
+            certificateLevel: @certificate_level || SmartId.default_certificate_level,
+            hash: authentication_hash.calculate_base64_digest,
+            hashType: 'SHA256',
+            allowedInteractionsOrder: [
+              {
+                type: 'displayTextAndPIN',
+                displayText60: 'Up to 60 characters of text here..'
+              }
+            ]
+          }
+
+          params.merge!(displayText: @display_text) if @display_text
+
+          params.merge!(requestProperties: { vcChoice: @multiple_choice }) if @multiple_choice
+
+          params
+        end
+
+        def api_uri
+          raise NotImplementedError
+        end
+
       end
     end
   end

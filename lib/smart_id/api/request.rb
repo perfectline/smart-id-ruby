@@ -2,8 +2,8 @@ require 'logger'
 require 'date'
 module SmartId::Api
   class Request
-    DEMO_BASE_URL = "https://sid.demo.sk.ee/smart-id-rp/v1/"
-    PRODUCTION_BASE_URL = "https://rp-api.smart-id.com/v1/"
+    DEMO_BASE_URL = "https://sid.demo.sk.ee/smart-id-rp/v2/"
+    PRODUCTION_BASE_URL = "https://rp-api.smart-id.com/v2/"
 
     DEMO_SSL_KEY = "QLZIaH7Qx9Rjq3gyznQuNsvwMQb7maC5L4SLu/z5qNU="
     PROD_KEY_EXPIRY = Date.new(2020,11,5)
@@ -47,7 +47,7 @@ module SmartId::Api
     end
 
     def execute
-      maybe_warn_of_ssl_key_expiry
+      # maybe_warn_of_ssl_key_expiry
 
       if @method.to_sym == :post
         attrs = post_request_attrs
@@ -66,11 +66,11 @@ module SmartId::Api
         url: @url,
         headers: { content_type: :json, accept: :json },
         timeout: SmartId.poller_timeout_seconds + 1,
-        ssl_verify_callback: lambda do |_, cert_store|
-          provided_pub_key = cert_store.chain[0].public_key
-          saved_key = self.class.const_get("#{SmartId.environment}_SSL_KEY")
-          Digest::SHA256.digest(provided_pub_key.to_der) == Base64.decode64(saved_key)
-        end
+        # ssl_verify_callback: lambda do |_, cert_store|
+        #   provided_pub_key = cert_store.chain[0].public_key
+        #   saved_key = self.class.const_get("#{SmartId.environment}_SSL_KEY")
+        #   Digest::SHA256.digest(provided_pub_key.to_der) == Base64.decode64(saved_key)
+        # end
       }
     end
 
