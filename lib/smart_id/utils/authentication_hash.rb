@@ -1,15 +1,18 @@
+# frozen_string_literal: true
+
 require 'digest'
 require 'base64'
 
 module SmartId
   module Utils
     class AuthenticationHash
+
       attr_reader :hash_data
-      
+
       def initialize(hash_data = nil)
         @hash_data = hash_data || random_bytes
       end
-      
+
       def calculate_digest
         Digest::SHA256.digest(hash_data)
       end
@@ -23,6 +26,7 @@ module SmartId
       def random_bytes
         OpenSSL::Random.random_bytes(64)
       end
+
     end
   end
 end
