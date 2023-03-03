@@ -13,7 +13,7 @@ module SmartId
       end
 
       def verification_code
-        @verification_code ||= SmartId::VerificationCodeCalculator.calculate(@authentication_hash.calculate_digest)
+        @verification_code ||= SmartId::Utils::VerificationCodeCalculator.calculate(@authentication_hash.calculate_digest)
       end
 
     end

@@ -53,7 +53,7 @@ module SmartId
       private
 
       def validate!(hashed_data)
-        SmartId::Utils::CertificateValidator.validate!(hashed_data, signature, certificate)
+        SmartId::Utils::CertificateValidator.validate!(hashed_data, signature, certificate) unless certificate.cert.nil?
       end
 
     end
