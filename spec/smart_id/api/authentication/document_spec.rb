@@ -2,8 +2,8 @@
 
 RSpec.describe SmartId::Api::Authentication::Document do
   let(:mocked_auth_hash) { double(SmartId::Api::AuthenticationHash) }
-  let(:successful_data) { 'PNOEE-10101010005-Z1B2-Q' }
-  let(:incorrect_account_type_data) { 'PNOLV-020101-10000-96R2-NQ' }
+  let(:successful_data) { 'PNOLV-329999-99709-MOCK-Q' }
+  let(:incorrect_account_type_data) { 'PNOLT-49912318881-MOCK-NQ' }
   let(:auth_hash) { SmartId::Utils::AuthenticationHash.new }
 
   describe '.authenticate' do
