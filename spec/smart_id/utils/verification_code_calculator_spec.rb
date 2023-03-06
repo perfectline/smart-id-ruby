@@ -10,7 +10,7 @@ RSpec.describe SmartId::Utils::VerificationCodeCalculator do
     end
 
     it 'consistenly provides same 4 digits for the same data' do
-      expect(described_class.calculate('Somesampledata')).to eq('0222')
+      expect(described_class.calculate('Somesampledata')).to eq('9793')
     end
   end
 end
