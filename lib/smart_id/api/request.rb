@@ -57,7 +57,7 @@ module SmartId
                   get_request_attrs
                 end
 
-        request = RestClient::Request.execute(**attrs)
+        RestClient::Request.execute(**attrs)
       end
 
       private
@@ -77,10 +77,7 @@ module SmartId
       end
 
       def get_request_attrs
-        default_attrs.merge(headers: {
-                              **default_attrs[:headers],
-                              params: @params
-                            })
+        default_attrs.merge(headers: { **default_attrs[:headers], params: @params })
       end
 
       def post_request_attrs
